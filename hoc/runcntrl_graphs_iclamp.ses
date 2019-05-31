@@ -1,0 +1,65 @@
+objectvar save_window_, rvp_
+objectvar scene_vector_[5]
+objectvar ocbox_, ocbox_list_, scene_, scene_list_
+{ocbox_list_ = new List()  scene_list_ = new List()}
+
+//Begin PointProcessGroupManager
+{
+load_file("pointgrp.hoc")
+}
+{
+ocbox_ = new PointProcessGroupManager(0)
+}
+{object_push(ocbox_)}
+{
+ms = new MechanismStandard("IClamp")
+ms.set("del", 20, 0)
+ms.set("dur", 0.6, 0)
+ms.set("amp", 0.0, 0) // 0.05 makes a little pulse
+mnews("IClamp", ms)
+select(0)
+execute("GR_5 ocbox_.move(0)")
+}
+{object_pop() doNotify()}
+{
+ocbox_ = ocbox_.v1
+ocbox_.map("PointProcessGroupManager", 322, 580, 554.88, 295.68)
+}
+objref ocbox_
+//End PointProcessGroupManager
+
+{
+xpanel("RunControl", 0)
+v_init = -80 // -72 // -65
+xvalue("Init","v_init", 1,"stdinit()", 1, 1 )
+xbutton("Init & Run","run()")
+xbutton("Stop","stoprun=1")
+runStopAt = 5
+xvalue("Continue til","runStopAt", 1,"{continuerun(runStopAt) stoprun=1}", 1, 1 )
+runStopIn = 1
+xvalue("Continue for","runStopIn", 1,"{continuerun(t + runStopIn) stoprun=1}", 1, 1 )
+xbutton("Single Step","steprun()")
+t = 0
+xvalue("t","t", 2 )
+tstop = 5
+xvalue("Tstop","tstop", 1,"tstop_changed()", 0, 1 )
+dt = 0.025
+xvalue("dt","dt", 1,"setdt()", 0, 1 )
+steps_per_ms = 40
+xvalue("Points plotted/ms","steps_per_ms", 1,"setdt()", 0, 1 )
+screen_update_invl = 0.05
+xvalue("Scrn update invl","screen_update_invl", 1,"", 0, 1 )
+realtime = 0
+xvalue("Real Time","realtime", 0,"", 0, 1 )
+xpanel(41,208)
+}
+{
+save_window_ = new PlotShape(0)
+save_window_.size(0.166668,58.6042,-29.3765,29.061)
+save_window_.variable("v")
+scene_vector_[2] = save_window_
+{save_window_.view(0.166668, -29.3765, 58.4375, 58.4375, 998, 268, 200.64, 200.32)}
+fast_flush_list.append(save_window_)
+save_window_.save_name("fast_flush_list.")
+}
+{doNotify()}

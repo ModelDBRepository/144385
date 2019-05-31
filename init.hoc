@@ -1,0 +1,38 @@
+// init.hoc initiailze dendrite and spines simulation
+// load the standard nrn libraries
+load_file("nrngui.hoc")
+
+// define the dendrite shape
+load_file("hoc/gr_dendrite_morphology.hoc")
+
+// load the Spine class and place spines on dendrite
+// the below lists store sections when the Spine template is called
+// these lists can be then used with forsec:
+objref spine_list, spinehead_list, spineneck_list
+spine_list = new SectionList()
+spinehead_list=new SectionList()
+spineneck_list=new SectionList()
+
+load_file("hoc/spine_template.hoc")
+load_file("hoc/spine_placement.hoc")
+
+// create a "rig" to record and stimulate dendrite/spines
+load_file("hoc/runcntrl_graphs_iclamp.ses")
+
+//insert currents and receptors
+load_file("hoc/electrotonic_length.hoc") // parameters to study electrotonic length
+
+// load_file("calcium1.ses") // display a graph of cai in spine head
+load_file("hoc/v_soma_spine_dend.ses")
+
+// loads the traces onto a couple of voltage graphs
+load_file("hoc/traceX_reader.hoc")
+
+// files for the Multiple Run Fitter
+load_file("hoc/params.hoc")
+load_file("mrf/mrf.ses")
+
+// add on a couple extra compartments to extend the granule cell as per fig 1
+load_file("hoc/extra_dendrite.hoc")
+
+

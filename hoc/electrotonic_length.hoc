@@ -1,0 +1,112 @@
+// electrotonic_length.hoc
+// measures the electrotonic length of V given synaptic conductances
+// either in the spine head or on the dendritic shaft
+
+// General goals
+// play conductance waveforms into the "passive" synapse to study
+// the electrotonic length of synaptic inhibition under the conditions 
+// 1) Synaptic Inhibition (SI) (vs only the leak current)
+// 2) SI with a bAP
+// 3) SI with Synaptic Excitation (SE)
+// 4) SI with both bAP and SE
+//
+
+
+//************************
+// Inhibitory conductance section
+// 1) SI with only the leak current
+// the passive setup
+// Assume a rat RS prefrontal cortical pyramidal neuron has a surface
+// area of 1500 um^2 (estimated from Degenetais E et al. 2002) and
+// an input resistance of 35 MOhms then the conductance in S/cm2 is
+
+// 1500 micron squared =1.5e-5 centimeter squared
+
+// a constant to set the leak current conductance g_pas to throughout
+// a pre-frontal cortex pyy cell (Degenetais et al 2002).
+g_pas_pfc= 1/(35e6*1.5e-5) // 0.0019 S/cm2
+
+g_pas_gr = 1/4000
+forall { g_pas = g_pas_gr  e_pas = -80 Ra=80 cm=1}
+
+// the -65 was the default however we set it here anyway to show that
+// this is the place to change it
+
+// for ease of computations use fixed time step 0.025 ms 
+objref t_vec
+tstop=12
+print "tstop=",tstop,", dt=",dt
+t_vec=new Vector()
+t_vec.indgen(0, tstop, dt) // start, stop, step
+print "t_vec.size()=",t_vec.size()
+
+objref g_vec
+load_file("create_trapezoid.hoc")
+
+g_vec=create_trapezoid(8e-3) // pass peak conductance in nS
+//g_vec=create_trapezoid(8e-3) // 8 nS (in uS)
+objref graph_conductance
+graph_conductance = new Graph()
+g_vec.line(graph_conductance, t_vec)
+graph_conductance.exec_menu("View = plot")
+graph_conductance.label(.3,.8,"Inhibitory conductance per time")
+
+// put excitatory, inhibitory synapses everywhere so they can be used if desired
+
+objref excitatory[1000], inhibitory[1000]
+// store references for up to 1000 excitatory and inhibitory synapses each
+objref esyn_list, isyn_list
+esyn_list = new List()
+isyn_list = new List()
+isyn=0 // indicies for about to be newly created synaptic point processes
+esyn=0
+print "excitatory synapses"
+forall  {
+  for (x,0) {
+    excitatory[esyn] = new excite(0.5)
+    print x,", ", secname(),", ", esyn
+    esyn_list.append(excitatory[esyn])
+    esyn=esyn+1
+  }
+}
+print esyn_list.count," created"
+
+for i=0, esyn_list.count()-1 {
+ esyn_list.o(i).g=0 // start out with no excitatory conductance however then below
+}
+print "inhibitory synapses"
+forall  {
+  for (x,0) {
+    inhibitory[isyn] = new inhib(0.5)
+    print x,", ", secname(),", ", isyn
+    isyn_list.append(inhib[isyn])
+    isyn=isyn+1
+  }
+}
+print isyn_list.count," created"
+
+for i=0, isyn_list.count()-1 {
+ isyn_list.o(i).g=0 // start out with no excitatory conductance however then below
+}
+//g_vec.play(&Spine[0].head.g_excite(0.5), t_vec)
+//g_vec.play(&dendrite.g_excite(0.78), t_vec)
+
+objref g1,g2,g3,g4
+{ g1=g_vec.c }
+{ g2=g1.c }
+{ g3=g1.c }
+{ g4=g1.c }
+
+print "g1, g2, g3, g4 are all available for gX.play(&esyn_list.o(head).g,t_vec)"
+
+// obsolete:
+print "paper excitatory synapse's corresponding to "
+print "GR compartments ten, three, eight, one are available"
+ten=5
+three=9
+eight=3
+one=7
+
+// g1.c.play(&esyn_list.o(one).g,t_vec)
+// params file is now stimulating the GR-1 section (Spine[0].head)
+load_file("gr_v_graph.ses") // granule cell voltage graph

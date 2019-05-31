@@ -1,0 +1,24 @@
+ParmFitness: Fig 2B Shepherd Brayton 1979
+	FitnessGenerator: GR_1
+		RegionFitness:	Spine[0].head.v(0.5)
+
+	FitnessGenerator: GR_8
+		RegionFitness:	GR_8.v(0.5)
+
+	FitnessGenerator: GR_3
+		RegionFitness:	Spine[1].head.v(0.5)
+
+	FitnessGenerator: GR_10
+		RegionFitness:	GR_10.v(0.5)
+
+	Parameters:
+		"Ri", 93.552, 8, 800, 1, 1
+		"Cm", 1, 0.5, 2, 0, 1
+		"Rm", 1323.5, 400, 40000, 1, 1
+		"start_of_ramp", 0.61636, 0.5, 1.5, 0, 1
+		"delta_of_ramp", 0.32523, 0.02, 1, 0, 1
+		"delta_of_plateau", 0.32676, 0.02, 1, 0, 1
+		"g_max_param", 0.014003, 0.0008, 0.08, 0, 1
+		"neck_diam0", 0.2, 1e-09, 1, 0, 1
+		"neck_diam1", 0.2, 1e-09, 1, 0, 1
+End ParmFitness

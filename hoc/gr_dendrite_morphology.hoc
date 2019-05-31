@@ -1,0 +1,18 @@
+// gr_ dendrite_morphology.hoc
+// create a simple granule cell dendrite to which spines can be added.
+// Shepherd Brayton 1987 fig 1
+
+create GR_5, GR_6, GR_7, GR_8, GR_9, GR_10
+
+GR_5 connect GR_6(0), 1
+GR_6 connect GR_7(0), 1
+GR_7 connect GR_8(0), 1
+GR_8 connect GR_9(0), 1
+GR_9 connect GR_10(0), 1
+
+forsec "GR" {
+  L=70
+  diam=1
+  insert pas
+  e_pas=-80
+}

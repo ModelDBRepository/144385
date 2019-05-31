@@ -1,0 +1,23 @@
+objref fig2b
+fig2b=new Graph(0)
+
+objectvar rvp_
+objectvar scene_vector_[8]
+objectvar ocbox_, ocbox_list_, scene_, scene_list_
+{ocbox_list_ = new List()  scene_list_ = new List()}
+{
+fig2b.size(0,12,-90,-20)
+scene_vector_[6] = fig2b
+{fig2b.view(0, -90, 12, 70, 514, 325, 659.52, 496.96)}
+graphList[0].append(fig2b)
+fig2b.save_name("graphList[0].")
+//fig2b.addexpr("dendrite.v(0.9167)", 4, 1, 0.8, 0.9, 2)
+//fig2b.addexpr("dendrite.v(0.58333)", 1, 8, 0.8, 0.9, 2)
+fig2b.addexpr("GR_10.v(0.5)", 4, 1, 0.8, 0.9, 2)
+fig2b.addexpr("GR_8.v(0.5)", 1, 8, 0.8, 0.9, 2)
+fig2b.addexpr("Spine[1].head.v(0.5)", 2, 1, 0.8, 0.9, 2)
+fig2b.addexpr("Spine[0].head.v(0.5)", 3, 1, 0.8, 0.9, 2)
+fig2b.label(0.212518, 0.923374, "GR-1=Spine[0].head, GR-3=Spine[1].head", 2, 1, 0, 0, 1)
+}
+objectvar scene_vector_[1]
+{doNotify()}

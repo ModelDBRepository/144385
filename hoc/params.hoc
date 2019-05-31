@@ -1,0 +1,65 @@
+// proxies for NEURON's Ra, cm, g_pas
+Ri = 80    // ohm cm
+Cm = 1     // uf/cm2
+Rm = 4000 // 1000  // ohm cm2
+g_factor = 1 // used to pump up or down the current clamp amplitude
+// above replaced with adjusting g_max via g_max_param
+objref g_temp // a temporary conductance vector.  used to keep g1 standard
+g1.play_remove() // used to remove play in so no competition with g_temp (see init()):
+extra_L=70 // length of top and bottom dendrite shaft
+
+start_of_ramp=start_ramp
+delta_of_ramp=delta_ramp
+delta_of_plateau = delta_plateau
+g_max_param=g1.max()
+g_temp=create_trapezoid(g_max_param, start_of_ramp, delta_of_ramp, delta_of_plateau)
+neck_diam0 = 0
+// forsec "neck" {neck_diam=diam} // set a default neck_diam
+neck_diam1=0
+
+Spine[0].neck {
+  neck_diam0 = diam 
+  L0=L
+}
+Spine[1].neck {
+  neck_diam1 = diam
+  L1=L
+}
+
+forall { e_pas = -80 }
+
+proc init() {
+  // optimizer adjusts Ri, Cm, Rm, but NEURON uses Ra, cm, g_pas
+  forall {
+    Ra = Ri
+    cm = Cm
+    g_pas = 1/Rm
+  }
+//  g_temp=g1.c.mul(g_factor)  // important to make a copy first, then multiply, rather than vice-versa
+
+graph_conductance.erase()
+g_temp.line(graph_conductance, t_vec, 0, 6) // erase old one
+g_vec.line(graph_conductance, t_vec) // rewrite fig 2 specified conductance
+
+g_temp=create_trapezoid(g_max_param, start_of_ramp, delta_of_ramp, delta_of_plateau)
+g_temp.line(graph_conductance, t_vec, 2, 6) // display new one as dashed line
+
+  g_temp.play_remove()
+  g_temp.play(&esyn_list.o(one).g,t_vec)
+
+  forsec "dendrite_" { L=extra_L }
+
+//  forsec "neck" { diam = neck_diam } // used to optimize iver neck diam if desired
+  Spine[0].neck diam=neck_diam0
+  Spine[0].neck L=L0
+  Spine[1].neck diam=neck_diam1
+  Spine[1].neck L=L1
+
+  finitialize(v_init)
+  if (cvode.active()) {
+    cvode.re_init()
+  } else {
+    fcurrent()
+  }
+  frecord_init()
+}

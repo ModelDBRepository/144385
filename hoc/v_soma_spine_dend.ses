@@ -1,0 +1,35 @@
+// v_soma_spine_dend.ses
+// no longer contains any reference to soma
+objectvar all_comps_v_graph, rvp_
+objectvar scene_vector_[7]
+objectvar ocbox_, ocbox_list_, scene_, scene_list_
+{ocbox_list_ = new List()  scene_list_ = new List()}
+{
+all_comps_v_graph = new Graph(0)
+all_comps_v_graph.size(0,15,-80,-40)
+scene_vector_[6] = all_comps_v_graph
+{all_comps_v_graph.view(0, -80, 15, 40, 411, 311, 300.48, 200.32)}
+graphList[0].append(all_comps_v_graph)
+topy= 1.00543
+deltay=0.009583
+all_comps_v_graph.save_name("graphList[0].")
+// all_comps_v_graph.addexpr("dendrite.v(0.083333333)",  1, 1, 0.5,topy,  2)
+// all_comps_v_graph.addexpr("dendrite.v(0.25)",         2, 1, 0.5, topy-deltay,  2)
+// all_comps_v_graph.addexpr("dendrite.v(0.41666667)",   3, 1, 0.5, topy-2*deltay,  2)
+// all_comps_v_graph.addexpr("dendrite.v(0.58333333)",   4, 1, 0.5, topy-3*deltay,  2)
+// all_comps_v_graph.addexpr("dendrite.v(0.75)",         5, 1, 0.5, topy-4*deltay,  2)
+// all_comps_v_graph.addexpr("dendrite.v(0.91666667)",   6, 1, 0.5, topy-5*deltay,  2)
+all_comps_v_graph.addexpr("GR_5.v(0.5)",  1, 1, 0.5,topy,  2)
+all_comps_v_graph.addexpr("GR_6.v(0.5)",         2, 1, 0.5, topy-deltay,  2)
+all_comps_v_graph.addexpr("GR_7.v(0.5)",   3, 1, 0.5, topy-2*deltay,  2)
+all_comps_v_graph.addexpr("GR_8.v(0.5)",   4, 1, 0.5, topy-3*deltay,  2)
+all_comps_v_graph.addexpr("GR_9.v(0.5)",         5, 1, 0.5, topy-4*deltay,  2)
+all_comps_v_graph.addexpr("GR_10.v(0.5)",   6, 1, 0.5, topy-5*deltay,  2)
+all_comps_v_graph.addexpr("Spine[0].head.v(0.5)",     7, 1, 0.5,topy-6*deltay, 2)
+all_comps_v_graph.addexpr("Spine[0].neck.v(0.5)",     8, 1, 0.5,topy-7*deltay, 2)
+all_comps_v_graph.addexpr("Spine[1].head.v(0.5)",     9, 1, 0.5,topy-8*deltay, 2)
+all_comps_v_graph.addexpr("Spine[1].neck.v(0.5)",     1, 6, 0.5,topy-9*deltay, 2)
+// soma, 0.5 
+}
+objectvar scene_vector_[1]
+{doNotify()}

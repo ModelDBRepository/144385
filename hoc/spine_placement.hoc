@@ -1,0 +1,36 @@
+objref tmpsr
+// dendrite tmpsr=new SectionRef()
+// now tmpsr refers (pointer) to the dendrite section
+
+objref spineref[1000]
+// objref spine_location_vec
+
+// spine_location_vec= new Vector()
+//  spine_location_vec.append(175, 245) // micron converted to 
+// x values 0<x<1 below for synapse location
+
+// for i=0, spine_location_vec.size()-1 {
+//  print "Placing a spine at ", spine_location_vec.x[i]," microns, which has an x value of ", spine_location_vec.x[i]/dendrite.L
+
+//   spineref[i] = new Spine(tmpsr, spine_location_vec.x[i]/dendrite.L)
+// }
+
+
+// adjust geometry of spines to Shepherd Brayton 1987 Fig1
+
+
+GR_7 tmpsr = new SectionRef() // temporary section reference
+spineref[0] = new Spine(tmpsr, 0.5) // x=0.5 location for spine placement
+GR_8 tmpsr = new SectionRef()
+spineref[1] = new Spine(tmpsr, 0.5) // x=0.5 location for spine placement
+
+forsec spineneck_list {
+  diam=0.2
+  L=1
+  e_pas=-80
+}
+forsec spinehead_list {
+  diam=1.0
+  L=3
+  e_pas=-80
+}

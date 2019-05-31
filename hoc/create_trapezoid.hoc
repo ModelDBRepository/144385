@@ -1,0 +1,75 @@
+// create_waveform.hoc
+// object function creates a waveform of "alpha" or "trapezoid" types
+// with a maximum conductance in nS as the second parameter.
+// As the function is currently a distributed mechanism it uses
+// Spine[[0].head's area to find the S/cm2 value needed to make
+// the maximum conductance true.
+
+objref e1_vec, e2_vec, minus_t_over_tau1, minus_t_over_tau2
+objref g_vec_
+
+// reset the below three in the if statement far below
+start_ramp=0  // start time for synaptic event
+delta_ramp=0 // time for rise and fall in ms
+delta_plateau=0 // step length in ms
+
+obfunc create_trapezoid() { // returns vector waveform based on
+// $1 = max conductance in nS for spine head
+
+g_vec_=new Vector(tstop/dt+1)
+
+// create a trapezoid of height 1 then rescale to desired size
+
+if (numarg()==4) {
+  start_ramp=$2
+  delta_ramp=$3
+  delta_plateau=$4
+} else {
+  // parameters from Shepherd and Brayton 1987 fig 2:
+  start_ramp=0.9 -0.375 // 0.375 fig2 correction factor // for large tstop: 10  // small tstop: 0.9 // start time for synaptic event
+  delta_ramp=0.2 // for large tstop: 300 // small tstop: 0.2 // time for rise and fall in ms
+  delta_plateau=0.8 // for large tstop: 200 // 0.8 // step length in ms
+}
+  // events are (in millisec):
+  //  start_ramp = start of trapezoid
+  // start_ramp+delta_ramp = start of plateau at top
+  // start_ramp+delta_ramp+delta_plateau = end of plateau/start of descent
+  // start_ramp+delta_ramp+delta_plateau+delta_ramp = all done
+  for t_index=0, t_vec.size()-1 {
+    time = t_vec.x[t_index]
+    if ((time>=start_ramp) && (time<=start_ramp+delta_ramp)) {
+      if (delta_ramp>0) {
+	g_vec_.x[t_index] = (time-start_ramp)/ delta_ramp
+      } else {
+	g_vec_.x[t_index]=1 // stays on inclusive of start point if delta_ramp = 0
+      }
+    } else if ((time>=start_ramp+delta_ramp) && (time<=start_ramp+delta_ramp+delta_plateau)) {
+	g_vec_.x[t_index]=1
+    } else if ((time>=start_ramp+delta_ramp+delta_plateau) && (time<=start_ramp+delta_ramp+delta_plateau+delta_ramp)) {
+      if (delta_ramp>0) {
+	g_vec_.x[t_index] = 1-(time-(start_ramp+delta_ramp+delta_plateau))/ delta_ramp
+      } else {
+	g_vec_.x[t_index] = 1 // stays on inclusive of end point if delta_ramp = 0.
+      }
+    } else {
+      g_vec_.x[t_index] = 0
+    }
+  }
+  
+// normalize synaptic conductance to 0.41 nS
+// note that g_inhib is in units of S/cm2
+// so to go from to nanosiemens have to first
+// find the area of a spine head in cm2
+
+Spine[0].head  spine_head_area_microns=area(0.5)
+spine_head_cm2=spine_head_area_microns * 1e-8
+current_max=g_vec_.max() // used to scale the current_max to desired max in below
+g_nS = $1 // 0.41e-3 // desired 0.41 nS max conductance in microSiemens
+// note 1e-9 converts nS to S
+// for density mech: g_vec_.mul( g_nS * 1e-9 / (current_max * spine_head_cm2 ))
+g_vec_.mul( g_nS / current_max)
+// now the conductance is scaled so that in the spine head it should
+// reach a maximum of 0.41 nS
+
+return g_vec_
+}

@@ -1,0 +1,28 @@
+objref trace1, trace1x
+clipboard_retrieve("../traces2vecs/trace1.dat")
+trace1=hoc_obj_[0]
+trace1x=hoc_obj_[1]
+trace1.line(fig2b, trace1x)
+
+objref trace2, trace2x
+clipboard_retrieve("../traces2vecs/trace2.dat")
+trace2=hoc_obj_[0]
+trace2x=hoc_obj_[1]
+trace2.line(fig2b, trace2x)
+
+objref trace3, trace3x
+clipboard_retrieve("../traces2vecs/trace3.dat")
+trace3=hoc_obj_[0]
+trace3x=hoc_obj_[1]
+trace3.line(fig2b, trace3x)
+
+objref trace4, trace4x
+clipboard_retrieve("../traces2vecs/trace4.dat")
+trace4=hoc_obj_[0]
+trace4x=hoc_obj_[1]
+trace4.line(fig2b, trace4x)
+
+trace1.line(all_comps_v_graph, trace1x, 1, 6)
+trace2.line(all_comps_v_graph, trace2x, 1, 6)
+trace3.line(all_comps_v_graph, trace3x, 1, 6)
+trace4.line(all_comps_v_graph, trace4x, 1, 6)

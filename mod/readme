@@ -1,0 +1,10 @@
+The mod files are from the publications:
+
+ampa.mod  cadiffus.mod  canmda.mod  car.mod  nmda.mod
+are from Grunditz et al. 2008
+
+cad.mod ca.mod kca.mod km.mod kv.mod na.mod
+are from Mainen & Sejnowski 1996
+
+gabaa.mod
+is from Traub et al. 2005

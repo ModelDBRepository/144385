@@ -1,0 +1,19 @@
+// extra_dendrite.hoc
+// explores effect of adding extra compartments to the ends of the
+// existing dendrite in the model
+
+create dendrite_top, dendrite_bottom
+// dendrite_bottom connect dendrite(0), 1
+// dendrite connect dendrite_top(0), 1
+
+dendrite_bottom connect GR_5(0), 1
+GR_10 connect dendrite_top(0), 1
+
+dendrite_top { insert pas L=70 diam=1 e_pas=-80}
+dendrite_bottom {insert pas L=70 diam=1 e_pas=-80}
+
+objref shaft
+shaft=new SectionList()
+forsec "GR" shaft.append()
+forsec "dendrite" shaft.append()
+
